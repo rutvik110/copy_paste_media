@@ -1,0 +1,22 @@
+PODS:
+  - copy_paste_media (0.0.1):
+    - FlutterMacOS
+  - FlutterMacOS (1.0.0)
+
+DEPENDENCIES:
+  - copy_paste_media (from `Flutter/ephemeral/.symlinks/plugins/copy_paste_media/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+
+EXTERNAL SOURCES:
+  copy_paste_media:
+    :path: Flutter/ephemeral/.symlinks/plugins/copy_paste_media/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+
+SPEC CHECKSUMS:
+  copy_paste_media: f7f26e464dece1d0f31690c71884ac7a2267e5cc
+  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
+
+PODFILE CHECKSUM: 0d3963a09fc94f580682bd88480486da345dc3f0
+
+COCOAPODS: 1.16.2
