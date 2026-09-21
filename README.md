@@ -2,6 +2,11 @@ Copy and paste images to and from the system clipboard in Flutter.
 
 macOS only. Other platforms are not yet supported. Feel free to contribute support for other platforms.
 
+Demo(macOS): 
+
+https://github.com/user-attachments/assets/e7eaebda-dc02-4819-a0c5-2b282794fe79
+
+
 ## Features
 
 - Copy image from flutter app onto the system clipboard.
