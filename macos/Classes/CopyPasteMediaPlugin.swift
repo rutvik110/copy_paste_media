@@ -98,7 +98,7 @@ public class CopyPasteMediaPlugin: NSObject, FlutterPlugin {
 
     if pb.canReadObject(forClasses: [NSImage.self], options: nil),
        let images = pb.readObjects(forClasses: [NSImage.self], options: nil) as? [NSImage] {
-      for image in images where !isLikelyFileIcon(image) {
+      for image in images {
         if let data = imageBytes(from: image) {
           return .bytes(data)
         }
@@ -156,14 +156,5 @@ public class CopyPasteMediaPlugin: NSObject, FlutterPlugin {
     guard let tiff = image.tiffRepresentation,
           let rep = NSBitmapImageRep(data: tiff) else { return nil }
     return rep.representation(using: .png, properties: [:])
-  }
-
-  /// Finder / NSWorkspace file icons have several standard icon sizes.
-  private func isLikelyFileIcon(_ image: NSImage) -> Bool {
-    let reps = image.representations
-    guard reps.count >= 2 else { return false }
-    let iconWidths: Set<Int> = [16, 18, 32, 36, 64, 128, 256, 512, 1024]
-    let widths = Set(reps.map { $0.pixelsWide })
-    return widths.count >= 2 && widths.isSubset(of: iconWidths)
   }
 }
