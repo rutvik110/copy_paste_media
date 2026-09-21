@@ -13,7 +13,7 @@ class CopyPasteMedia {
     return CopyPasteMediaPlatform.instance.copyImage(imageBase64);
   }
 
-  /// Reads the first image on the system clipboard.
+  /// Reads the image from the system clipboard.
   ///
   /// Returns image bytes, or `null` when the clipboard has no image (plain
   /// text, empty, or an unsupported type).

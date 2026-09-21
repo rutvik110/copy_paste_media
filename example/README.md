@@ -1,16 +1,6 @@
-# copy_paste_media_example
+# copy_paste_media example
 
-Demonstrates how to use the copy_paste_media plugin.
+Demonstrates copying a bundled image to the macOS clipboard and pasting
+images from Finder, Preview, or other apps.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+See the [package README](../README.md) for setup and API usage.

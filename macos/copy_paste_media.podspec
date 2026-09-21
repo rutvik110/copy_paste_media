@@ -4,20 +4,20 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'copy_paste_media'
-  s.version          = '0.0.1'
-  s.summary          = 'Copy and paste images to and from the system clipboard.'
+  s.version          = '0.0.2'
+  s.summary          = 'Copy and paste images to and from the macOS clipboard.'
   s.description      = <<-DESC
-Copy and paste images to and from the system clipboard in Flutter.
+Copy and paste images to and from the macOS clipboard in Flutter.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/rutvik110/copy_paste_media'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Rutvik Tak' => 'takrutvik@gmail.com' }
 
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.dependency 'FlutterMacOS'
 
-  s.platform = :osx, '10.11'
+  s.platform = :osx, '10.15'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
 end
