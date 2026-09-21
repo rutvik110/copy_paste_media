@@ -18,9 +18,6 @@ class _FakeCopyPasteMediaPlatform
 
   @override
   Future<Uint8List?> pasteImage() async => nextPaste;
-
-  @override
-  Future<String?> getPlatformVersion() async => 'macOS test';
 }
 
 void main() {

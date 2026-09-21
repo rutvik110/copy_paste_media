@@ -26,9 +26,4 @@ class CopyPasteMedia {
   static Future<Uint8List?> pasteImage() {
     return CopyPasteMediaPlatform.instance.pasteImage();
   }
-
-  /// The host platform version string, if available.
-  static Future<String?> getPlatformVersion() {
-    return CopyPasteMediaPlatform.instance.getPlatformVersion();
-  }
 }

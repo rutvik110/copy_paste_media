@@ -17,32 +17,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   Uint8List? _pastedImage;
   String? _pasteStatus;
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    try {
-      platformVersion =
-          await CopyPasteMedia.getPlatformVersion() ??
-          'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
 
   Future<Uint8List?> _sampleImageBytes() async {
     final data = await rootBundle.load(_sampleAsset);
@@ -92,11 +68,6 @@ class _MyAppState extends State<MyApp> {
                 Text(
                   'Copy the sample image, or paste one from Finder, Preview, or another app.',
                   style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  _platformVersion,
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
                 ),
                 const SizedBox(height: 24),
                 Expanded(

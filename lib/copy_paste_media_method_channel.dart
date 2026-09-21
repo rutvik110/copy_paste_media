@@ -10,14 +10,6 @@ class MethodChannelCopyPasteMedia extends CopyPasteMediaPlatform {
   final methodChannel = const MethodChannel('copy_paste_media');
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>(
-      'getPlatformVersion',
-    );
-    return version;
-  }
-
-  @override
   Future<void> copyImage(String imageBase64) async {
     await methodChannel.invokeMethod<String>('copyImage', {
       'image': imageBase64,
