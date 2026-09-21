@@ -10,10 +10,10 @@ import 'package:copy_paste_media/copy_paste_media.dart';
 
 final clipboard = CopyPasteMedia();
 
-// Copy PNG/JPEG bytes (base64) onto the pasteboard.
-await clipboard.copyImage(base64Encode(pngBytes));
+// Copy image bytes (base64) onto the pasteboard.
+await clipboard.copyImage(base64Encode(imageBytes));
 
-// Read the first clipboard image as PNG bytes.
+// Read the first clipboard image.
 final pasted = await clipboard.pasteImage();
 if (pasted != null) {
   // Image.memory(pasted)
@@ -21,4 +21,4 @@ if (pasted != null) {
 ```
 
 `pasteImage` returns `null` when the clipboard has no image (text, empty, or
-an unsupported type). It accepts PNG, TIFF, JPEG, HEIC, and Finder file URLs.
+an unsupported type). It accepts in-memory images and Finder file URLs.
