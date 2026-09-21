@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'copy_paste_media'
-  s.version          = '0.0.2'
+  s.version          = '0.1.0'
   s.summary          = 'Copy and paste images to and from the macOS clipboard.'
   s.description      = <<-DESC
 Copy and paste images to and from the macOS clipboard in Flutter.

@@ -1,6 +1,6 @@
 name: copy_paste_media
 description: Copy and paste images to and from the system clipboard in Flutter.
-version: 0.0.2
+version: 0.1.0
 homepage: https://github.com/rutvik110/copy_paste_media
 repository: https://github.com/rutvik110/copy_paste_media
 issue_tracker: https://github.com/rutvik110/copy_paste_media/issues

@@ -1,4 +1,4 @@
-Copy and paste images to and from the sysytem clipboard in Flutter.
+Copy and paste images to and from the system clipboard in Flutter.
 
 macOS only. Other platforms are not yet supported. Feel free to contribute support for other platforms.
 
@@ -13,7 +13,7 @@ Add the package to your app:
 
 ```yaml
 dependencies:
-  copy_paste_media: ^0.0.2
+  copy_paste_media: ^0.1.0
 ```
 
 Then:
