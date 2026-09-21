@@ -43,16 +43,14 @@ import 'dart:typed_data';
 import 'package:copy_paste_media/copy_paste_media.dart';
 import 'package:flutter/widgets.dart';
 
-final clipboard = CopyPasteMedia();
-
 // Copy image to the pasteboard.
 Future<void> copy(Uint8List imageBytes) async {
-  await clipboard.copyImage(base64Encode(imageBytes));
+  await CopyPasteMedia.copyImage(base64Encode(imageBytes));
 }
 
 // Paste the clipboard image, if any.
 Future<Image?> paste() async {
-  final bytes = await clipboard.pasteImage();
+  final bytes = await CopyPasteMedia.pasteImage();
   if (bytes == null) return null;
   return Image.memory(bytes);
 }

@@ -26,6 +26,9 @@ topics:
   - desktop
   - image
 
+platforms:
+  macos:
+
 flutter:
   plugin:
     platforms:

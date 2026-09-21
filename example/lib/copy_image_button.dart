@@ -7,10 +7,7 @@ import 'package:copy_paste_media/copy_paste_media.dart';
 import 'package:flutter/material.dart';
 
 class CopyImageButton extends StatefulWidget {
-  const CopyImageButton({
-    required this.onCopyImage,
-    super.key,
-  });
+  const CopyImageButton({required this.onCopyImage, super.key});
 
   final Future<Uint8List?> Function() onCopyImage;
 
@@ -37,23 +34,10 @@ class _CopyImageButtonState extends State<CopyImageButton>
     );
 
     animation = TweenSequence<double>([
-      TweenSequenceItem(
-        tween: Tween(begin: 0, end: 1),
-        weight: 50,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1, end: 1),
-        weight: 50,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1, end: 0),
-        weight: 0.01,
-      ),
-    ])
-        .chain(
-          CurveTween(curve: Curves.decelerate),
-        )
-        .animate(animationController);
+      TweenSequenceItem(tween: Tween(begin: 0, end: 1), weight: 50),
+      TweenSequenceItem(tween: Tween(begin: 1, end: 1), weight: 50),
+      TweenSequenceItem(tween: Tween(begin: 1, end: 0), weight: 0.01),
+    ]).chain(CurveTween(curve: Curves.decelerate)).animate(animationController);
   }
 
   @override
@@ -114,14 +98,16 @@ class _CopyImageButtonState extends State<CopyImageButton>
                       );
                       return;
                     }
-                    final String compressedJpegByteDate =
-                        base64Encode(capturedImageBytes);
+                    final String compressedJpegByteDate = base64Encode(
+                      capturedImageBytes,
+                    );
 
-                    final CopyPasteMedia imageCopy = CopyPasteMedia();
-
-                    await imageCopy.copyImage(compressedJpegByteDate);
+                    await CopyPasteMedia.copyImage(
+                      compressedJpegByteDate,
+                    );
                     await Future<void>.delayed(
-                        const Duration(milliseconds: 100));
+                      const Duration(milliseconds: 100),
+                    );
                     if (!mounted) return;
                     await animationController.forward();
                     messenger.showSnackBar(

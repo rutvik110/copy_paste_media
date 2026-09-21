@@ -20,7 +20,6 @@ class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   Uint8List? _pastedImage;
   String? _pasteStatus;
-  final _copyPasteMediaPlugin = CopyPasteMedia();
 
   @override
   void initState() {
@@ -31,7 +30,8 @@ class _MyAppState extends State<MyApp> {
   Future<void> initPlatformState() async {
     String platformVersion;
     try {
-      platformVersion = await _copyPasteMediaPlugin.getPlatformVersion() ??
+      platformVersion =
+          await CopyPasteMedia.getPlatformVersion() ??
           'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _pasteImage() async {
     try {
-      final bytes = await _copyPasteMediaPlugin.pasteImage();
+      final bytes = await CopyPasteMedia.pasteImage();
       setState(() {
         _pastedImage = bytes;
         _pasteStatus = bytes == null
@@ -91,10 +91,7 @@ class _MyAppState extends State<MyApp> {
                 const SizedBox(height: 4),
                 Text(
                   'Copy the sample image, or paste one from Finder, Preview, or another app.',
-                  style: TextStyle(
-                    color: Colors.grey.shade700,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -106,8 +103,9 @@ class _MyAppState extends State<MyApp> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final stacked = constraints.maxWidth < 720;
-                      final sample =
-                          _SamplePane(onCopyImage: _sampleImageBytes);
+                      final sample = _SamplePane(
+                        onCopyImage: _sampleImageBytes,
+                      );
                       final clipboard = _ClipboardPane(
                         bytes: _pastedImage,
                         status: _pasteStatus,
@@ -153,20 +151,13 @@ class _SamplePane extends StatelessWidget {
       title: 'Sample image',
       subtitle: 'Bundled Flutter asset',
       action: CopyImageButton(onCopyImage: onCopyImage),
-      child: Image.asset(
-        _sampleAsset,
-        fit: BoxFit.contain,
-      ),
+      child: Image.asset(_sampleAsset, fit: BoxFit.contain),
     );
   }
 }
 
 class _ClipboardPane extends StatelessWidget {
-  const _ClipboardPane({
-    required this.onPaste,
-    this.bytes,
-    this.status,
-  });
+  const _ClipboardPane({required this.onPaste, this.bytes, this.status});
 
   final Uint8List? bytes;
   final String? status;
@@ -245,8 +236,8 @@ class _PaneCard extends StatelessWidget {
                       Text(
                         subtitle,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: scheme.onSurfaceVariant,
-                            ),
+                          color: scheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
