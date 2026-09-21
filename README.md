@@ -1,3 +1,5 @@
+[![pub package](https://img.shields.io/pub/v/copy_paste_media.svg)](https://pub.dev/packages/copy_paste_media)
+
 Copy and paste images to and from the system clipboard in Flutter.
 
 macOS only. Other platforms are not yet supported. Feel free to contribute support for other platforms.
