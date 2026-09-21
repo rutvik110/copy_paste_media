@@ -15,97 +15,56 @@ public class CopyPasteMediaPlugin: NSObject, FlutterPlugin {
     case "copyImage":
       copyImage(call, result: result)
     case "pasteImage":
-      switch clipboardImageResult() {
-      case .bytes(let data):
-        result(FlutterStandardTypedData(bytes: data))
-      case .fileUnreadable:
-        result(FlutterError(
-          code: "file_access_denied",
-          message: "Could not read the copied file. A sandboxed app needs com.apple.security.files.user-selected.read-only to paste images copied in Finder.",
-          details: nil
-        ))
-      case .unavailable:
-        result(nil)
-      }
+      pasteImage(result: result)
     default:
       result(FlutterMethodNotImplemented)
     }
   }
 
-  /// Decodes the bytes as an image and writes that NSImage to the pasteboard.
   private func copyImage(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    guard let arguments = call.arguments as? [String: Any],
-          let imageBase64 = arguments["image"] as? String,
-          let rawData = Data(base64Encoded: imageBase64) else {
-      result(FlutterError(
-        code: "invalid_arguments",
-        message: "Expected base64 image data",
-        details: nil
-      ))
-      return
-    }
-
-    guard let image = NSImage(data: rawData), image.isValid else {
-      result(FlutterError(
-        code: "invalid_image",
-        message: "Could not decode image data",
-        details: nil
-      ))
-      return
-    }
-
+    let arguments = call.arguments as! [String: Any]
+    let imageData = arguments["image"] as! String
     let pb = NSPasteboard.general
     pb.clearContents()
-
-    guard pb.writeObjects([image]) else {
-      result(FlutterError(
-        code: "copy_failed",
-        message: "Pasteboard rejected the image",
-        details: nil
-      ))
-      return
+    if let data = Data(base64Encoded: imageData), let image = NSImage(data: data) {
+      pb.writeObjects([image])
     }
-
     result("image copied success")
   }
 
-  private enum ClipboardResult {
-    case bytes(Data)
-    case unavailable
-    case fileUnreadable
+  private func pasteImage(result: @escaping FlutterResult) {
+    if let data = clipboardImageBytes() {
+      result(FlutterStandardTypedData(bytes: data))
+    } else {
+      result(nil)
+    }
   }
 
-  /// Image bytes from the general pasteboard.
-  ///
-  /// Finder file copies put a `public.file-url` *and* a PNG of the file-type
-  /// icon. Those files must be read via the host app's
-  /// `com.apple.security.files.user-selected.read-only` entitlement. In-memory
-  /// images (Preview, Safari, screenshots) do not need that entitlement.
-  private func clipboardImageResult() -> ClipboardResult {
+  /// Finder file copies include a file URL plus a file-type icon. Read the
+  /// file first (needs `com.apple.security.files.user-selected.read-only`).
+  /// Preview / Safari / screenshots only need the in-memory NSImage.
+  private func clipboardImageBytes() -> Data? {
     let pb = NSPasteboard.general
     let urls = fileURLs(from: pb)
 
     if !urls.isEmpty {
       for url in urls {
-        if let data = readImageFile(url) {
-          return .bytes(data)
+        if let data = readFileData(url) {
+          return data
         }
       }
-      // Do not fall through to in-memory types: for Finder copies that is
-      // almost always the file icon, not the photo.
-      return .fileUnreadable
+      return nil
     }
 
     if pb.canReadObject(forClasses: [NSImage.self], options: nil),
-       let images = pb.readObjects(forClasses: [NSImage.self], options: nil) as? [NSImage] {
-      for image in images {
-        if let data = imageBytes(from: image) {
-          return .bytes(data)
-        }
-      }
+       let images = pb.readObjects(forClasses: [NSImage.self], options: nil) as? [NSImage],
+       let image = images.first,
+       let tiff = image.tiffRepresentation,
+       let rep = NSBitmapImageRep(data: tiff) {
+      return rep.representation(using: .png, properties: [:])
     }
 
-    return .unavailable
+    return nil
   }
 
   private func fileURLs(from pb: NSPasteboard) -> [URL] {
@@ -120,13 +79,6 @@ public class CopyPasteMediaPlugin: NSObject, FlutterPlugin {
     return []
   }
 
-  private func readImageFile(_ url: URL) -> Data? {
-    guard let data = readFileData(url), NSImage(data: data) != nil else {
-      return nil
-    }
-    return data
-  }
-
   private func readFileData(_ url: URL) -> Data? {
     let accessed = url.startAccessingSecurityScopedResource()
     defer {
@@ -134,27 +86,6 @@ public class CopyPasteMediaPlugin: NSObject, FlutterPlugin {
         url.stopAccessingSecurityScopedResource()
       }
     }
-
-    var fileData: Data?
-    var coordinatorError: NSError?
-    NSFileCoordinator().coordinate(
-      readingItemAt: url,
-      options: .withoutChanges,
-      error: &coordinatorError
-    ) { coordinatedURL in
-      fileData = try? Data(contentsOf: coordinatedURL)
-    }
-    return fileData ?? (try? Data(contentsOf: url))
-  }
-
-  private func imageBytes(from image: NSImage) -> Data? {
-    for case let bitmap as NSBitmapImageRep in image.representations {
-      if let png = bitmap.representation(using: .png, properties: [:]) {
-        return png
-      }
-    }
-    guard let tiff = image.tiffRepresentation,
-          let rep = NSBitmapImageRep(data: tiff) else { return nil }
-    return rep.representation(using: .png, properties: [:])
+    return try? Data(contentsOf: url)
   }
 }
